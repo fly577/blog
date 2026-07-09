@@ -1,0 +1,12 @@
+<% if (page.prev || page.next) { %>
+<nav class="post-nav">
+  <% if (page.prev) { %>
+    <a href="<%- url_for(page.prev.path) %>" class="post-nav-prev"><%= page.prev.title %></a>
+  <% } else { %>
+    <span></span>
+  <% } %>
+  <% if (page.next) { %>
+    <a href="<%- url_for(page.next.path) %>" class="post-nav-next"><%= page.next.title %></a>
+  <% } %>
+</nav>
+<% } %>

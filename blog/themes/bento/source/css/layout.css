@@ -1,0 +1,10 @@
+/* ============================================================
+   Bento Theme — Layout Container
+   ============================================================ */
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--padding-body);
+  min-height: calc(100vh - var(--nav-height) - 100px);
+}

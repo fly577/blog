@@ -1,0 +1,20 @@
+/* ============================================================
+   Bento Theme — Footer
+   ============================================================ */
+
+.site-footer {
+  text-align: center;
+  padding: 40px var(--padding-body);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.site-footer a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.site-footer a:hover {
+  color: var(--accent-dark);
+}

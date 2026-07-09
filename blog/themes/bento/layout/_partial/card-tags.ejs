@@ -1,0 +1,24 @@
+<div class="card-tags-title">Tags</div>
+
+<div class="tag-cloud">
+<%
+var tags = site.tags;
+if (tags && tags.length > 0) {
+  // Find max count for relative sizing
+  var maxCount = 0;
+  tags.forEach(function(t) { maxCount = Math.max(maxCount, t.posts.length); });
+
+  tags.forEach(function(tag) {
+    var sizeClass = 'size-sm';
+    if (tag.posts.length >= maxCount * 0.7) sizeClass = 'size-lg';
+    else if (tag.posts.length >= maxCount * 0.4) sizeClass = 'size-md';
+%>
+  <a href="<%- url_for(tag.path) %>" class="tag-capsule <%= sizeClass %>">
+    <%= tag.name %><span class="tag-count"><%= tag.posts.length %></span>
+  </a>
+<%
+  });
+} else { %>
+  <span style="color:var(--text-tertiary);font-size:var(--font-size-sm);">No tags yet.</span>
+<% } %>
+</div>

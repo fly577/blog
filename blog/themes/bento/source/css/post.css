@@ -1,0 +1,202 @@
+/* ============================================================
+   Bento Theme — Post Article Typography
+   ============================================================ */
+
+.post-article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+/* -- Back navigation -- */
+.post-back {
+  margin-bottom: 32px;
+}
+
+.post-back a {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast);
+}
+
+.post-back a:hover {
+  color: var(--accent-primary);
+}
+
+/* -- Post header -- */
+.post-header {
+  margin-bottom: 40px;
+}
+
+.post-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.post-meta-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.post-meta-tag {
+  font-size: var(--font-size-xs);
+  padding: 3px 12px;
+  background: var(--bg-tag);
+  border-radius: var(--radius-full);
+  color: var(--accent-primary);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.post-meta-tag:hover {
+  background: var(--bg-tag-hover);
+  color: var(--text-inverse);
+}
+
+/* -- Post content -- */
+.post-content {
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: var(--text-primary);
+}
+
+.post-content p {
+  margin: 1.5em 0;
+}
+
+.post-content h2 {
+  font-size: 1.75rem;
+  margin: 2.5rem 0 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.post-content h3 {
+  font-size: 1.375rem;
+  margin: 2rem 0 0.75rem;
+  font-weight: 600;
+}
+
+.post-content h4 {
+  font-size: 1.125rem;
+  margin: 1.5rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.post-content ul,
+.post-content ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+
+.post-content ul { list-style: disc; }
+.post-content ol { list-style: decimal; }
+
+.post-content li {
+  margin: 0.3em 0;
+}
+
+.post-content code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--bg-code-inline);
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--accent-dark);
+}
+
+.post-content pre {
+  margin: 1.5em 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.post-content pre code {
+  background: var(--bg-code-block);
+  padding: 20px 24px;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+}
+
+.post-content a {
+  color: var(--text-link);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.post-content a:hover {
+  border-bottom-color: var(--text-link);
+}
+
+.post-content blockquote {
+  border-left: 3px solid var(--accent-light);
+  margin: 1.5em 0;
+  padding: 1em 1.5em;
+  color: var(--text-secondary);
+  background: var(--bg-card-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.post-content blockquote p {
+  margin: 0.5em 0;
+}
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 1.5em auto;
+}
+
+.post-content hr {
+  border: none;
+  border-top: 1px solid var(--border-card);
+  margin: 2em 0;
+}
+
+/* -- Post navigation -- */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-card);
+  gap: 20px;
+}
+
+.post-nav a {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  max-width: 45%;
+  transition: color var(--transition-fast);
+}
+
+.post-nav a:hover {
+  color: var(--accent-primary);
+}
+
+.post-nav-prev::before {
+  content: '← ';
+}
+
+.post-nav-next::after {
+  content: ' →';
+}

@@ -1,0 +1,10 @@
+<div class="post-meta">
+  <time><%= date(post.date, 'YYYY-MM-DD') %></time>
+  <% if (post.tags && post.tags.length > 0) { %>
+    <span class="post-meta-tags">
+      <% post.tags.each(function(tag) { %>
+        <a href="<%- url_for(tag.path) %>" class="post-meta-tag"><%= tag.name %></a>
+      <% }); %>
+    </span>
+  <% } %>
+</div>

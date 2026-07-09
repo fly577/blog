@@ -1,0 +1,16 @@
+<%
+var initial = (config.author || 'H').charAt(0).toUpperCase();
+var avatarUrl = theme.avatar;
+%>
+
+<% if (avatarUrl) { %>
+  <img src="<%- url_for(avatarUrl) %>" alt="<%= config.author %>" class="card-about-avatar">
+<% } else { %>
+  <div class="card-about-avatar"><%= initial %></div>
+<% } %>
+
+<div class="card-about-name"><%= config.author %></div>
+
+<% if (theme.bio) { %>
+  <p class="card-about-bio"><%= theme.bio %></p>
+<% } %>

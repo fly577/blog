@@ -1,0 +1,21 @@
+<div class="card-recent-title">Recent Posts</div>
+
+<div class="recent-list">
+<%
+var posts = site.posts;
+var count = 0;
+posts.each(function(post) {
+  if (count === 0) { count++; return; } // skip featured (first post)
+  if (count > 4) return;                 // show max 4 recent posts
+  count++;
+%>
+  <a href="<%- url_for(post.path) %>" class="recent-item">
+    <time class="recent-item-date"><%= date(post.date, 'MM-DD') %></time>
+    <span class="recent-item-title"><%= post.title %></span>
+  </a>
+<%
+});
+if (count <= 1) { %>
+  <p style="color:var(--text-tertiary);font-size:var(--font-size-sm);padding:10px 12px;">No more posts yet.</p>
+<% } %>
+</div>

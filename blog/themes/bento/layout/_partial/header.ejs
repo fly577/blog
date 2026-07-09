@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="<%- url_for() %>" class="site-brand"><%= config.title %></a>
+    <nav class="site-nav" id="siteNav">
+      <% if (theme.menu) { %>
+        <% for (var label in theme.menu) { %>
+          <a href="<%- url_for(theme.menu[label]) %>"><%= label %></a>
+        <% } %>
+      <% } %>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

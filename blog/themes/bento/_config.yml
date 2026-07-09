@@ -1,0 +1,24 @@
+# Bento Theme Configuration
+
+# Navigation menu
+menu:
+  Home: /
+  Archives: /archives
+  Tags: /tags
+
+# Social links (appear in Card E)
+social:
+  GitHub: https://github.com/Hesiea
+
+# Projects (appear in Card E)
+projects:
+  - name: BlogAutoPublisher
+    url: https://github.com/Hesiea/blog
+    description: Node.js 自动化博客发布工具
+
+# About Me card
+avatar:
+bio: 热爱代码与设计，探索前端世界的无限可能。
+
+# Footer copyright
+copyright: true

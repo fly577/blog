@@ -1,0 +1,18 @@
+<div class="archive-page">
+  <h1 class="archive-page-title">Archives</h1>
+
+  <% var year; %>
+  <% page.posts.each(function(post) { %>
+    <% var postYear = post.date.year(); %>
+    <% if (year !== postYear) { %>
+      <% year = postYear; %>
+      <h2 class="archive-year"><%= year %></h2>
+    <% } %>
+    <div class="archive-entry">
+      <time><%= date(post.date, 'MM-DD') %></time>
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </div>
+  <% }); %>
+</div>
+
+<%- paginator({ prev_text: 'Prev', next_text: 'Next' }) %>

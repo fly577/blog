@@ -1,0 +1,30 @@
+<div class="card-social-title">Connect</div>
+
+<div class="social-links">
+<%
+var icons = { 'GitHub': '&#9906;', 'Twitter': '&#9993;', 'RSS': '&#9733;' };
+if (theme.social) {
+  for (var label in theme.social) {
+%>
+  <a href="<%= theme.social[label] %>" class="social-link" target="_blank" rel="noopener">
+    <span class="social-icon"><%- icons[label] || '&#128279;' %></span>
+    <span><%= label %></span>
+  </a>
+<%
+  }
+}
+%>
+</div>
+
+<% if (theme.projects && theme.projects.length > 0) { %>
+  <div style="margin-top: 16px;">
+    <% theme.projects.forEach(function(proj) { %>
+      <a href="<%= proj.url %>" class="project-item" target="_blank" rel="noopener" style="display:block;text-decoration:none;">
+        <div class="project-item-name"><%= proj.name %></div>
+        <% if (proj.description) { %>
+          <div class="project-item-desc"><%= proj.description %></div>
+        <% } %>
+      </a>
+    <% }); %>
+  </div>
+<% } %>

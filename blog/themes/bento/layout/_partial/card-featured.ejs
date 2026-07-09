@@ -1,0 +1,25 @@
+<%
+var posts = site.posts;
+var featured = null;
+posts.each(function(p) { if (!featured) featured = p; });
+if (!featured) { %>
+  <div class="card-featured-body" style="text-align:center;color:var(--text-tertiary);">No posts yet.</div>
+<% } else {
+  var excerpt = featured.description || featured.excerpt || '';
+  if (!excerpt) {
+    // fallback: strip HTML tags from content and take first 120 chars
+    excerpt = featured.content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 120);
+  }
+%>
+  <div class="card-featured-cover">
+    <span class="card-featured-cover-icon">&#9998;</span>
+  </div>
+  <div class="card-featured-body">
+    <h3 class="card-featured-title">
+      <a href="<%- url_for(featured.path) %>"><%= featured.title %></a>
+    </h3>
+    <time class="card-featured-date"><%= date(featured.date, 'YYYY-MM-DD') %></time>
+    <p class="card-featured-excerpt"><%= excerpt %></p>
+    <a href="<%- url_for(featured.path) %>" class="card-featured-more">Read More &rarr;</a>
+  </div>
+<% } %>

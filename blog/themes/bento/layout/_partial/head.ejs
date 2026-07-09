@@ -1,0 +1,22 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<%
+var titleText = config.title;
+if (is_archive()) { titleText = 'Archives | ' + config.title; }
+else if (is_tag())   { titleText = (page.tag ? page.tag + ' | ' : '') + 'Tags | ' + config.title; }
+else if (is_category()) { titleText = (page.category || 'Categories') + ' | ' + config.title; }
+else if (page.title) { titleText = page.title + ' | ' + config.title; }
+%>
+<title><%= titleText %></title>
+
+<%- open_graph({}) %>
+<%- css('css/style') %>
+
+<% if (theme.rss) { %>
+<link rel="alternate" href="<%- url_for(theme.rss) %>" type="application/atom+xml" title="<%= config.title %>">
+<% } %>
+
+<% if (theme.favicon) { %>
+<link rel="icon" href="<%- url_for(theme.favicon) %>">
+<% } %>

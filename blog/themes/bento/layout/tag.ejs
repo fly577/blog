@@ -1,0 +1,23 @@
+<div class="tag-page">
+<% if (page.tag) { %>
+  <!-- Tag-filtered posts view -->
+  <h1 class="tag-page-title"><%= page.tag %></h1>
+  <% page.posts.each(function(post) { %>
+    <div class="archive-entry">
+      <time><%= date(post.date, 'YYYY-MM-DD') %></time>
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </div>
+  <% }); %>
+
+<% } else { %>
+  <!-- All tags cloud view -->
+  <h1 class="tag-page-title">Tags</h1>
+  <div class="tag-cloud tag-cloud-large">
+    <% site.tags.forEach(function(tag) { %>
+      <a href="<%- url_for(tag.path) %>" class="tag-capsule">
+        <%= tag.name %><span class="tag-count"><%= tag.posts.length %></span>
+      </a>
+    <% }); %>
+  </div>
+<% } %>
+</div>
