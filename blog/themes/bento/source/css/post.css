@@ -65,6 +65,29 @@
   color: var(--text-inverse);
 }
 
+/* -- Category badges (filled style, distinct from tags) -- */
+.post-meta-cats {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.post-meta-cat {
+  font-size: var(--font-size-xs);
+  padding: 3px 14px;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  color: var(--text-inverse);
+  font-weight: 500;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.post-meta-cat:hover {
+  background: var(--accent-dark);
+  color: var(--text-inverse);
+  transform: translateY(-1px);
+}
+
 /* -- Post content -- */
 .post-content {
   font-size: var(--font-size-lg);

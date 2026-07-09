@@ -256,6 +256,18 @@
 .tag-capsule.size-md { font-size: var(--font-size-sm);  padding: 6px 18px; }
 .tag-capsule.size-sm { font-size: var(--font-size-xs);  padding: 4px 14px; }
 
+/* -- Category capsule (filled accent style) -- */
+.category-capsule {
+  background: var(--accent-primary) !important;
+  color: var(--text-inverse) !important;
+  border-color: var(--accent-primary);
+}
+
+.category-capsule:hover {
+  background: var(--accent-dark) !important;
+  color: var(--text-inverse) !important;
+}
+
 /* ============================================================
    Card E — Social / Projects
    ============================================================ */

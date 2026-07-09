@@ -4,7 +4,6 @@
 <%
 var tags = site.tags;
 if (tags && tags.length > 0) {
-  // Find max count for relative sizing
   var maxCount = 0;
   tags.forEach(function(t) { maxCount = Math.max(maxCount, t.posts.length); });
 
@@ -22,3 +21,14 @@ if (tags && tags.length > 0) {
   <span style="color:var(--text-tertiary);font-size:var(--font-size-sm);">No tags yet.</span>
 <% } %>
 </div>
+
+<% var cats = site.categories; if (cats && cats.length > 0) { %>
+<div class="card-tags-title" style="margin-top: 20px;">Categories</div>
+<div class="tag-cloud">
+  <% cats.forEach(function(cat) { %>
+    <a href="<%- url_for(cat.path) %>" class="tag-capsule category-capsule">
+      <%= cat.name %><span class="tag-count"><%= cat.posts.length %></span>
+    </a>
+  <% }); %>
+</div>
+<% } %>

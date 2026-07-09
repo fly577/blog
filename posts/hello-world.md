@@ -1,6 +1,8 @@
 ---
 title: 你好，世界
 date: 2026-07-09
+categories:
+  - 技术
 tags:
   - Node.js
   - 博客

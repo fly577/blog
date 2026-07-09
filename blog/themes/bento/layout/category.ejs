@@ -1,0 +1,23 @@
+<div class="tag-page">
+<% if (page.category) { %>
+  <!-- Posts filtered by category -->
+  <h1 class="tag-page-title"><%= page.category %></h1>
+  <% page.posts.each(function(post) { %>
+    <div class="archive-entry">
+      <time><%= date(post.date, 'YYYY-MM-DD') %></time>
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </div>
+  <% }); %>
+
+<% } else { %>
+  <!-- All categories overview -->
+  <h1 class="tag-page-title">Categories</h1>
+  <div class="tag-cloud tag-cloud-large">
+    <% site.categories.forEach(function(cat) { %>
+      <a href="<%- url_for(cat.path) %>" class="tag-capsule category-capsule">
+        <%= cat.name %><span class="tag-count"><%= cat.posts.length %></span>
+      </a>
+    <% }); %>
+  </div>
+<% } %>
+</div>

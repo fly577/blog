@@ -4,6 +4,7 @@
 menu:
   Home: /
   Archives: /archives
+  Categories: /categories
   Tags: /tags
 
 # Social links (appear in Card E)
@@ -28,11 +29,11 @@ copyright: true
 # 2. Enable Discussions in repo Settings
 # 3. Fill in the values below from https://giscus.app
 giscus:
-  enable: false
+  enable: true
   repo: Hesiea/blog
-  repo_id: ''
-  category: Announcements
-  category_id: ''
+  repo_id: 'R_kgDOTSxrtw'
+  category: Ideas
+  category_id: 'DIC_kwDOTSxrt84DA0OB'
   mapping: pathname
   strict: 0
   reactions: 1
