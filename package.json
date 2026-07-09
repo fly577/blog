@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "scan":     "node index.js scan ./posts",
+    "inject":   "node index.js inject ./posts",
+    "publish":  "node index.js publish ./posts --blog ./blog --build --force",
+    "deploy":   "node index.js deploy --blog ./blog",
+    "release":  "node index.js publish ./posts --blog ./blog --build --deploy --force",
+    "dev":      "cd blog && npx hexo server",
+    "clean":    "cd blog && npx hexo clean"
   },
   "keywords": [],
   "author": "",

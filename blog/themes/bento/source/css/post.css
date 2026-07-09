@@ -200,3 +200,10 @@
 .post-nav-next::after {
   content: ' →';
 }
+
+/* -- Comments (Giscus) -- */
+.post-comments {
+  margin-top: 60px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border-card);
+}

@@ -22,3 +22,20 @@ bio: 热爱代码与设计，探索前端世界的无限可能。
 
 # Footer copyright
 copyright: true
+
+# Giscus comments (https://giscus.app)
+# 1. Install https://github.com/apps/giscus on your repo
+# 2. Enable Discussions in repo Settings
+# 3. Fill in the values below from https://giscus.app
+giscus:
+  enable: false
+  repo: Hesiea/blog
+  repo_id: ''
+  category: Announcements
+  category_id: ''
+  mapping: pathname
+  strict: 0
+  reactions: 1
+  emit_metadata: 0
+  theme: preferred_color_scheme
+  lang: zh-CN
