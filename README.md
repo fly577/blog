@@ -275,10 +275,16 @@ A: 编辑 `blog/themes/bento/source/css/variables.css`，修改 CSS 自定义属
 
 ---
 
+## 📋 项目演进日志
+
+完整的版本历史、优化成果总结、已知问题与后续优化方向，请查看 **[CHANGELOG.md](./CHANGELOG.md)**。
+
+---
+
 ## 📄 License
 
 ISC
 
 ---
 
-> **📌 本文档随功能更新同步维护。** 如有新增功能、配置变更或工作流调整，请同步更新本 README 对应章节。最后更新：2026-07-09
+> **📌 本文档随功能更新同步维护。** 如有新增功能、配置变更或工作流调整，请同步更新本 README 对应章节和 [CHANGELOG.md](./CHANGELOG.md)。最后更新：2026-07-09
