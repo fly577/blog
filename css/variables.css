@@ -1,0 +1,70 @@
+/* ============================================================
+   Bento Theme — Design Tokens (CSS Custom Properties)
+   ============================================================ */
+
+:root {
+  /* -- Backgrounds -- */
+  --bg-body:        #FBFBF9;
+  --bg-card:        #FFFFFF;
+  --bg-card-subtle: #F8F8F6;
+  --bg-tag:         #F0F5F4;
+  --bg-tag-hover:   #5C8D89;
+  --bg-code-inline: #F2F2F0;
+  --bg-code-block:  #F8F8F6;
+  --bg-hover-row:   #FAFAF8;
+
+  /* -- Text -- */
+  --text-primary:    #1D1D1F;
+  --text-secondary:  #6E6E73;
+  --text-tertiary:   #86868B;
+  --text-inverse:    #FFFFFF;
+  --text-link:       #5C8D89;
+  --text-link-hover: #3D6B67;
+
+  /* -- Accent (Morandi teal) -- */
+  --accent-primary:   #5C8D89;
+  --accent-secondary: #8AB0AA;
+  --accent-light:     #C5D8D4;
+  --accent-dark:      #3D6B67;
+
+  /* -- Borders & Shadows -- */
+  --border-card:   rgba(0,0,0,0.04);
+  --shadow-xs:  0 1px 4px  rgba(0,0,0,0.02);
+  --shadow-sm:  0 2px 8px  rgba(0,0,0,0.03);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.03);
+  --shadow-lg:  0 8px 30px rgba(0,0,0,0.05);
+  --shadow-hover: 0 12px 40px rgba(0,0,0,0.08);
+
+  /* -- Radius -- */
+  --radius-sm:   12px;
+  --radius-md:   16px;
+  --radius-lg:   20px;
+  --radius-full: 9999px;
+
+  /* -- Typography -- */
+  --font-sans: 'PingFang SC', 'Inter', 'Roboto',
+               -apple-system, BlinkMacSystemFont,
+               'Segoe UI', 'Microsoft YaHei UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+
+  --font-size-xs:   0.75rem;   /* 12px */
+  --font-size-sm:   0.875rem;  /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg:   1.125rem;  /* 18px */
+  --font-size-xl:   1.375rem;  /* 22px */
+  --font-size-2xl:  1.75rem;   /* 28px */
+  --font-size-3xl:  2.25rem;   /* 36px */
+
+  /* -- Spacing -- */
+  --gap-grid:      24px;
+  --padding-card:  28px;
+  --padding-body:  32px;
+  --max-width:     1200px;
+  --nav-height:    56px;
+
+  /* -- Transitions -- */
+  --ease-smooth:    cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-fast: 0.2s var(--ease-smooth);
+  --transition-base: 0.3s var(--ease-smooth);
+  --transition-slow: 0.5s var(--ease-smooth);
+}

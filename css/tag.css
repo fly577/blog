@@ -1,0 +1,28 @@
+/* ============================================================
+   Bento Theme — Tag Pages
+   ============================================================ */
+
+.tag-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.tag-page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+/* Reuse tag-capsule from cards.css; add larger layout */
+.tag-cloud-large {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-cloud-large .tag-capsule {
+  padding: 8px 22px;
+  font-size: var(--font-size-base);
+}

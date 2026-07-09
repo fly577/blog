@@ -1,0 +1,98 @@
+/* ============================================================
+   Bento Theme — Archive Page
+   ============================================================ */
+
+.archive-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.archive-page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  margin-bottom: 40px;
+  letter-spacing: -0.02em;
+}
+
+.archive-year {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--accent-light);
+}
+
+.archive-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.archive-entry:hover {
+  background: var(--bg-hover-row);
+  transform: translateX(4px);
+}
+
+.archive-entry time {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.archive-entry a {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.archive-entry:hover a {
+  color: var(--text-link);
+}
+
+/* -- Paginator -- */
+.paginator {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.paginator a,
+.paginator .page-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: background var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.paginator a {
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+}
+
+.paginator a:hover {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border-color: var(--accent-primary);
+}
+
+.paginator .page-number.current {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: 1px solid var(--accent-primary);
+}

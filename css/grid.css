@@ -1,0 +1,23 @@
+/* ============================================================
+   Bento Theme — CSS Grid Layout
+   ============================================================ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.2fr) minmax(360px, 2fr) minmax(200px, 1fr);
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "about   featured  tags"
+    "recent  featured  tags"
+    "recent  social    social";
+  gap: var(--gap-grid);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* -- Grid area assignments -- */
+.card-about    { grid-area: about; }
+.card-featured { grid-area: featured; }
+.card-recent   { grid-area: recent; }
+.card-tags     { grid-area: tags; }
+.card-social   { grid-area: social; }

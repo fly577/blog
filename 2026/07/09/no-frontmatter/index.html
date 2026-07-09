@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<title>JavaScript 异步编程指南 | My Blog</title>
+
+<meta name="description" content="JavaScript 的异步编程是现代 Web 开发的核心技能之一。从最初的回调函数，到 Promise，再到 async&#x2F;await，异步编程模型经历了巨大的演变。 回调函数时代...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 异步编程指南">
+<meta property="og:url" content="https://hesiea.github.io/blog/2026/07/09/no-frontmatter/index.html">
+<meta property="og:site_name" content="My Blog">
+<meta property="og:description" content="JavaScript 的异步编程是现代 Web 开发的核心技能之一。从最初的回调函数，到 Promise，再到 async&#x2F;await，异步编程模型经历了巨大的演变。 回调函数时代...">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-09T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-09T13:07:18.864Z">
+<meta property="article:author" content="Hesiea">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/blog/css/style.css">
+
+
+
+
+
+
+<body>
+  <header class="site-header">
+  <div class="header-inner">
+    <a href="/blog/" class="site-brand">My Blog</a>
+    <nav class="site-nav" id="siteNav">
+      
+        
+          <a href="/blog/">Home</a>
+        
+          <a href="/blog/archives">Archives</a>
+        
+          <a href="/blog/categories">Categories</a>
+        
+          <a href="/blog/tags">Tags</a>
+        
+      
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+  <main class="container">
+    <article class="post-article">
+  <nav class="post-back">
+    <a href="/blog/">&larr; Back</a>
+  </nav>
+  <header class="post-header">
+    <h1 class="post-title">JavaScript 异步编程指南</h1>
+    <div class="post-meta">
+  <time>2026-07-09</time>
+
+  
+
+  
+</div>
+
+  </header>
+  <div class="post-content">
+    <h1 id="JavaScript-异步编程指南"><a href="#JavaScript-异步编程指南" class="headerlink" title="JavaScript 异步编程指南"></a>JavaScript 异步编程指南</h1><p>JavaScript 的异步编程是现代 Web 开发的核心技能之一。从最初的回调函数，到 Promise，再到 async&#x2F;await，异步编程模型经历了巨大的演变。</p>
+<h2 id="回调函数时代"><a href="#回调函数时代" class="headerlink" title="回调函数时代"></a>回调函数时代</h2><p>最早的异步处理方式是回调函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&#x27;data.txt&#x27;</span>, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Promise-的崛起"><a href="#Promise-的崛起" class="headerlink" title="Promise 的崛起"></a>Promise 的崛起</h2><p>Promise 解决了回调地狱的问题，让异步代码更可读。</p>
+<h2 id="async-await-语法糖"><a href="#async-await-语法糖" class="headerlink" title="async&#x2F;await 语法糖"></a>async&#x2F;await 语法糖</h2><p>ES2017 引入的 async&#x2F;await 让异步代码看起来像同步代码一样直观。</p>
+
+  </div>
+  
+<nav class="post-nav">
+  
+    <a href="/blog/2026/07/09/hello-world/" class="post-nav-prev">你好，世界</a>
+  
+  
+    <a href="/blog/2026/07/08/tutorial/" class="post-nav-next">第二篇文章</a>
+  
+</nav>
+
+
+
+  
+  <section class="post-comments">
+    <div class="giscus"></div>
+    <script src="https://giscus.app/client.js"
+      data-repo="Hesiea/blog"
+      data-repo-id="R_kgDOTSxrtw"
+      data-category="Ideas"
+      data-category-id="DIC_kwDOTSxrt84DA0OB"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-theme="preferred_color_scheme"
+      data-lang="zh-CN"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+  </main>
+  <footer class="site-footer">
+  
+  <p>&copy; 2026 Hesiea. Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; Bento Theme.</p>
+  
+</footer>
+
+  
+<script src="/blog/js/main.js"></script>
+
+</body>
+</html>

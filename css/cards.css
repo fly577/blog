@@ -1,0 +1,337 @@
+/* ============================================================
+   Bento Theme — Card Base & Animations
+   ============================================================ */
+
+/* -- Card base -- */
+.bento-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--padding-card);
+  transition: transform var(--transition-base),
+              box-shadow var(--transition-base);
+  border: 1px solid var(--border-card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* -- Card entrance animation -- */
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bento-card {
+  animation: card-enter 0.6s var(--ease-smooth) both;
+}
+
+.bento-card:nth-child(1) { animation-delay: 0.05s; }
+.bento-card:nth-child(2) { animation-delay: 0.15s; }
+.bento-card:nth-child(3) { animation-delay: 0.25s; }
+.bento-card:nth-child(4) { animation-delay: 0.35s; }
+.bento-card:nth-child(5) { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-card { animation: none; }
+}
+
+/* ============================================================
+   Card A — About Me
+   ============================================================ */
+
+.card-about {
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.card-about-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--accent-light), var(--accent-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text-inverse);
+  flex-shrink: 0;
+}
+
+.card-about-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.card-about-bio {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 220px;
+}
+
+/* ============================================================
+   Card B — Featured Post
+   ============================================================ */
+
+.card-featured {
+  padding: 0;
+}
+
+.card-featured-cover {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card-featured-cover-icon {
+  font-size: 3rem;
+  opacity: 0.6;
+  color: var(--text-inverse);
+}
+
+.card-featured-body {
+  padding: var(--padding-card);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-featured-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.card-featured-title a {
+  color: var(--text-primary);
+}
+
+.card-featured-title a:hover {
+  color: var(--text-link);
+}
+
+.card-featured-date {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.card-featured-excerpt {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.card-featured-more {
+  margin-top: auto;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+/* ============================================================
+   Card C — Recent Posts
+   ============================================================ */
+
+.card-recent-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.recent-item:hover {
+  background: var(--bg-hover-row);
+  transform: translateX(4px);
+}
+
+.recent-item-date {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.recent-item-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.recent-item:hover .recent-item-title {
+  color: var(--text-link);
+}
+
+/* ============================================================
+   Card D — Tags Cloud
+   ============================================================ */
+
+.card-tags-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 16px;
+  background: var(--bg-tag);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: background var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.tag-capsule:hover {
+  background: var(--bg-tag-hover);
+  color: var(--text-inverse);
+  transform: translateY(-2px);
+}
+
+.tag-count {
+  font-size: 0.75em;
+  opacity: 0.6;
+}
+
+/* Varied sizes for visual weight */
+.tag-capsule.size-lg { font-size: var(--font-size-base); padding: 7px 20px; }
+.tag-capsule.size-md { font-size: var(--font-size-sm);  padding: 6px 18px; }
+.tag-capsule.size-sm { font-size: var(--font-size-xs);  padding: 4px 14px; }
+
+/* -- Category capsule (filled accent style) -- */
+.category-capsule {
+  background: var(--accent-primary) !important;
+  color: var(--text-inverse) !important;
+  border-color: var(--accent-primary);
+}
+
+.category-capsule:hover {
+  background: var(--accent-dark) !important;
+  color: var(--text-inverse) !important;
+}
+
+/* ============================================================
+   Card E — Social / Projects
+   ============================================================ */
+
+.card-social-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--bg-card-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.social-link:hover {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  transform: translateY(-2px);
+}
+
+.social-icon {
+  font-size: 1.1em;
+}
+
+.project-item {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--bg-card-subtle);
+  border-radius: var(--radius-sm);
+  transition: transform var(--transition-fast);
+}
+
+.project-item:hover {
+  transform: translateY(-2px);
+}
+
+.project-item-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.project-item-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}

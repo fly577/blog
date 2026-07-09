@@ -1,0 +1,164 @@
+/* ============================================================
+   Bento Theme — Responsive Breakpoints
+   ============================================================ */
+
+/* -- Tablet: 768px - 1023px -- */
+@media (max-width: 1023px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "about    featured"
+      "tags     featured"
+      "recent   recent"
+      "social   social";
+    gap: 20px;
+  }
+
+  .container {
+    padding: 24px;
+  }
+
+  .post-article,
+  .archive-page,
+  .tag-page {
+    padding: 32px 0;
+  }
+
+  .post-title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+/* -- Mobile: < 768px -- */
+@media (max-width: 767px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "about"
+      "featured"
+      "recent"
+      "tags"
+      "social";
+    gap: 16px;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  :root {
+    --padding-card: 22px;
+    --padding-body: 16px;
+  }
+
+  /* -- Mobile nav -- */
+  .nav-toggle {
+    display: block;
+    width: 32px;
+    height: 32px;
+    position: relative;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    position: absolute;
+    left: 6px;
+    transition: transform var(--transition-fast),
+                opacity var(--transition-fast);
+  }
+
+  .nav-toggle span:nth-child(1) { top: 10px; }
+  .nav-toggle span:nth-child(2) { top: 16px; }
+  .nav-toggle span:nth-child(3) { top: 22px; }
+
+  .nav-toggle.is-active span:nth-child(1) {
+    transform: rotate(45deg) translate(3px, 5px);
+  }
+  .nav-toggle.is-active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.is-active span:nth-child(3) {
+    transform: rotate(-45deg) translate(3px, -5px);
+  }
+
+  .site-nav {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--bg-body);
+    flex-direction: column;
+    gap: 0;
+    padding: 16px var(--padding-body);
+    border-bottom: 1px solid var(--border-card);
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--transition-base),
+                opacity var(--transition-base);
+  }
+
+  .site-nav.nav-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .site-nav a {
+    padding: 14px 0;
+    font-size: var(--font-size-base);
+    border-bottom: 1px solid var(--border-card);
+    width: 100%;
+  }
+
+  .site-nav a:last-child {
+    border-bottom: none;
+  }
+
+  /* -- Post -- */
+  .post-article {
+    padding: 24px 0;
+  }
+
+  .post-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .post-content {
+    font-size: var(--font-size-base);
+  }
+
+  .post-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .post-nav a {
+    max-width: 100%;
+  }
+
+  /* -- Archive -- */
+  .archive-entry {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .archive-page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  /* -- Card specific -- */
+  .card-featured-cover {
+    height: 140px;
+  }
+
+  .card-featured-title {
+    font-size: var(--font-size-xl);
+  }
+}
