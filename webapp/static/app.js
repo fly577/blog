@@ -1,0 +1,452 @@
+const canvas = document.getElementById('sky');
+const ctx = canvas.getContext('2d');
+const API_BASE_URL = String(window.WEATHER_AGENT_API_BASE_URL || '').replace(/\/+$/, '');
+let w = 0, h = 0, tick = 0, scene = 'sunny';
+const drops = Array.from({ length: 90 }, () => ({
+  x: Math.random(), y: Math.random(), speed: 0.012 + Math.random() * 0.018, len: 12 + Math.random() * 18
+}));
+const sparks = Array.from({ length: 48 }, () => ({
+  x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.5, drift: 0.2 + Math.random() * 0.8
+}));
+
+function resizeCanvas() {
+  const ratio = window.devicePixelRatio || 1;
+  w = canvas.width = Math.floor(window.innerWidth * ratio);
+  h = canvas.height = Math.floor(window.innerHeight * ratio);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function setSceneFromText(text) {
+  if (/雷|thunder/i.test(text)) scene = 'storm';
+  else if (/雨|rain/i.test(text)) scene = 'rain';
+  else if (/热|高温|炎|晴|sunny/i.test(text)) scene = 'hot';
+  else if (/云|cloud/i.test(text)) scene = 'cloud';
+  else scene = 'sunny';
+}
+
+function gradient() {
+  const g = ctx.createLinearGradient(0, 0, w, h);
+  if (scene === 'storm') {
+    g.addColorStop(0, '#52616e'); g.addColorStop(0.55, '#a7b8bd'); g.addColorStop(1, '#e6d0a0');
+  } else if (scene === 'rain') {
+    g.addColorStop(0, '#9ec6d0'); g.addColorStop(0.55, '#d4e6e5'); g.addColorStop(1, '#e9d8ae');
+  } else if (scene === 'hot') {
+    g.addColorStop(0, '#cfe9ef'); g.addColorStop(0.48, '#f3efe0'); g.addColorStop(1, '#f3c27a');
+  } else {
+    g.addColorStop(0, '#cce7ee'); g.addColorStop(0.55, '#eff5ed'); g.addColorStop(1, '#e7d29d');
+  }
+  return g;
+}
+
+function drawCloud(x, y, r, alpha) {
+  ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+  ctx.beginPath();
+  ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
+  ctx.arc(x + r * 0.42, y - r * 0.23, r * 0.72, 0, Math.PI * 2);
+  ctx.arc(x + r * 0.98, y, r * 0.5, 0, Math.PI * 2);
+  ctx.rect(x - r * 0.45, y, r * 1.82, r * 0.46);
+  ctx.fill();
+}
+
+function drawWave(y, amp, color, speed) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(0, h);
+  for (let x = 0; x <= w; x += 20) {
+    ctx.lineTo(x, y + Math.sin(x / 165 + tick * speed) * amp);
+  }
+  ctx.lineTo(w, h);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawRain() {
+  ctx.strokeStyle = scene === 'storm' ? 'rgba(235,248,255,0.58)' : 'rgba(63,104,124,0.34)';
+  ctx.lineWidth = Math.max(1, w / 1200);
+  drops.forEach(d => {
+    d.y += d.speed;
+    d.x += 0.0018;
+    if (d.y > 1.08) { d.y = -0.08; d.x = Math.random(); }
+    const x = d.x * w;
+    const y = d.y * h;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - d.len, y + d.len * 1.8);
+    ctx.stroke();
+  });
+}
+
+function drawSparks() {
+  sparks.forEach(s => {
+    const x = ((s.x * w) + Math.sin(tick * s.drift) * 28) % w;
+    const y = s.y * h;
+    ctx.fillStyle = 'rgba(255,233,170,0.42)';
+    ctx.beginPath();
+    ctx.arc(x, y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function animate() {
+  tick += 0.012;
+  ctx.fillStyle = gradient();
+  ctx.fillRect(0, 0, w, h);
+  drawSparks();
+  const sunX = w * (0.74 + Math.sin(tick * 0.35) * 0.02);
+  const sunY = h * (0.19 + Math.cos(tick * 0.25) * 0.015);
+  const radius = Math.min(w, h) * 0.072;
+  ctx.fillStyle = scene === 'storm' ? 'rgba(255,220,145,0.38)' : 'rgba(228, 158, 52, 0.84)';
+  ctx.beginPath();
+  ctx.arc(sunX, sunY, radius, 0, Math.PI * 2);
+  ctx.fill();
+  for (let i = 0; i < 8; i++) {
+    const x = ((i * 270 + tick * 7800) % (w + 420)) - 210;
+    const y = h * (0.13 + (i % 5) * 0.115);
+    drawCloud(x, y, 54 + (i % 4) * 16, scene === 'storm' ? 0.44 : 0.34 + (i % 3) * 0.12);
+  }
+  if (scene === 'rain' || scene === 'storm') drawRain();
+  if (scene === 'storm' && Math.floor(tick * 12) % 80 === 0) {
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.fillRect(0, 0, w, h);
+  }
+  drawWave(h * 0.78, 20, 'rgba(31,118,111,0.12)', 3.2);
+  drawWave(h * 0.86, 16, 'rgba(217,154,53,0.16)', 4.5);
+  requestAnimationFrame(animate);
+}
+animate();
+
+const $ = id => document.getElementById(id);
+const question = $('question');
+const ask = $('ask');
+const clear = $('clear');
+const copy = $('copy');
+const favorite = $('favorite');
+const answer = $('answer');
+const progressBar = $('progressBar');
+const percent = $('percent');
+const stepText = $('stepText');
+const city = $('city');
+const days = $('days');
+const mode = $('mode');
+const raw = $('raw');
+const intentHint = $('intentHint');
+const historyBox = $('history');
+const favoritesBox = $('favorites');
+const toast = $('toast');
+const steps = ['读取配置', '识别城市与天数', '查询天气或景点', '生成简洁回答'];
+let progressTimer = null;
+let lastAnswer = '';
+let lastData = null;
+
+function apiUrl(path) {
+  return API_BASE_URL ? API_BASE_URL + path : path;
+}
+
+function runningOnGithubPagesWithoutBackend() {
+  return !API_BASE_URL && /\.github\.io$/i.test(window.location.hostname);
+}
+
+function fetchApi(path, options) {
+  if (runningOnGithubPagesWithoutBackend()) {
+    return Promise.reject(new Error('GitHub Pages 只能托管静态页面，请先在 static/config.js 配置公开后端 API 地址。'));
+  }
+  return fetch(apiUrl(path), options);
+}
+
+function inferIntent(text) {
+  if (/景点|旅游|旅行|游玩|去哪|哪里玩|推荐|路线|攻略/.test(text)) return '天气 + 旅行推荐';
+  if (/未来|[1-3]\s*天|明天|预报/.test(text)) return '多天天气';
+  return '实时天气';
+}
+
+function refreshIntent() {
+  intentHint.textContent = inferIntent(question.value);
+}
+
+function setProgress(value, labelIndex) {
+  const pct = Math.max(0, Math.min(100, value));
+  progressBar.style.width = pct + '%';
+  percent.textContent = Math.round(pct) + '%';
+  const idx = Math.min(3, Math.max(0, labelIndex));
+  stepText.textContent = steps[idx];
+  for (let i = 0; i < 4; i++) $('s' + i).classList.toggle('active', i <= idx);
+}
+
+function startProgress() {
+  let value = 8;
+  setProgress(value, 0);
+  clearInterval(progressTimer);
+  progressTimer = setInterval(() => {
+    value = Math.min(92, value + 7 + Math.random() * 8);
+    setProgress(value, value < 30 ? 0 : value < 58 ? 1 : value < 82 ? 2 : 3);
+  }, 520);
+}
+
+function stopProgress(ok) {
+  clearInterval(progressTimer);
+  setProgress(ok ? 100 : 0, ok ? 3 : 0);
+  stepText.textContent = ok ? '完成' : '查询失败';
+}
+
+function showToast(text) {
+  toast.textContent = text;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1500);
+}
+
+async function loadHistory() {
+  try {
+    const res = await fetchApi('/api/history?limit=12');
+    if (!res.ok) throw new Error('历史读取失败');
+    renderHistory(await res.json());
+  } catch {
+    renderHistory([]);
+  }
+}
+
+async function loadFavorites() {
+  try {
+    const res = await fetchApi('/api/favorites?limit=12');
+    if (!res.ok) throw new Error('收藏读取失败');
+    renderFavorites(await res.json());
+  } catch {
+    renderFavorites([]);
+  }
+}
+
+function renderHistory(list) {
+  historyBox.innerHTML = '';
+  if (!list.length) {
+    const empty = document.createElement('p');
+    empty.className = 'lead';
+    empty.textContent = '暂无服务端历史。';
+    historyBox.appendChild(empty);
+    return;
+  }
+  list.forEach(item => {
+    const btn = document.createElement('button');
+    btn.textContent = item.question;
+    btn.title = item.answer;
+    btn.addEventListener('click', () => {
+      question.value = item.question;
+      refreshIntent();
+      showStoredResult(item);
+    });
+    historyBox.appendChild(btn);
+  });
+}
+
+function renderFavorites(list) {
+  favoritesBox.innerHTML = '';
+  if (!list.length) {
+    const empty = document.createElement('p');
+    empty.className = 'lead';
+    empty.textContent = '暂无收藏。';
+    favoritesBox.appendChild(empty);
+    return;
+  }
+  list.forEach(item => {
+    const btn = document.createElement('button');
+    btn.textContent = item.question;
+    btn.title = item.answer;
+    btn.addEventListener('click', () => {
+      question.value = item.question;
+      refreshIntent();
+      showStoredResult(item);
+    });
+    favoritesBox.appendChild(btn);
+  });
+}
+
+function showStoredResult(item) {
+  stopProgress(true);
+  answer.classList.remove('loading');
+  answer.textContent = item.answer || '无回答。';
+  lastAnswer = item.answer || '';
+  lastData = item;
+  city.textContent = item.city || '-';
+  days.textContent = item.days ? item.days + '天' : '-';
+  mode.textContent = item.include_attraction ? '天气 + 旅行' : '天气';
+  raw.textContent = [
+    item.weather ? '天气数据：\n' + item.weather : '',
+    item.attraction ? '\n景点依据：\n' + item.attraction : ''
+  ].filter(Boolean).join('\n');
+  analyzeWeather(item);
+  setSceneFromText((item.weather || '') + (item.answer || ''));
+}
+
+function firstNumber(text, patterns) {
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) return Number(match[1]);
+  }
+  return null;
+}
+
+function setDial(id, value) {
+  $(id).style.width = Math.max(6, Math.min(100, value)) + '%';
+}
+
+function resetSmartCards() {
+  $('comfortText').textContent = '等待数据';
+  $('heatText').textContent = '等待数据';
+  $('rainText').textContent = '等待数据';
+  $('tripText').textContent = '等待数据';
+  setDial('comfortDial', 18);
+  setDial('heatDial', 18);
+  setDial('rainDial', 18);
+  setDial('tripDial', 18);
+  $('timeline').innerHTML = '<div><b>时间线</b><span>查询后展示逐日天气或当前天气摘要。</span></div>';
+  $('planner').innerHTML = [
+    '<div><b>穿着</b><span>等待天气数据。</span></div>',
+    '<div><b>携带</b><span>等待天气数据。</span></div>',
+    '<div><b>时间</b><span>等待天气数据。</span></div>'
+  ].join('');
+}
+
+function analyzeWeather(data) {
+  const weather = data.weather || '';
+  const all = weather + '\n' + (data.answer || '');
+  const temp = firstNumber(all, [/体感温度(\d+)/, /气温(\d+)/, /平均(\d+)/, /(\d+)-\d+摄氏度/]);
+  const hasRain = /雨|rain/i.test(all);
+  const hasThunder = /雷|thunder/i.test(all);
+  const hasCloud = /云|cloud/i.test(all);
+  const hot = temp !== null && temp >= 32;
+  const warm = temp !== null && temp >= 28;
+  const comfort = hot ? 38 : warm ? 58 : hasRain ? 64 : 82;
+  const heat = hot ? 88 : warm ? 62 : 28;
+  const rain = hasThunder ? 86 : hasRain ? 68 : hasCloud ? 28 : 14;
+  const trip = data.include_attraction ? (hasThunder ? 42 : hasRain ? 56 : hot ? 66 : 84) : (hasThunder ? 46 : hasRain ? 60 : 78);
+
+  $('comfortText').textContent = comfort >= 75 ? '较舒适' : comfort >= 55 ? '一般' : '偏不适';
+  $('heatText').textContent = hot ? '高温明显' : warm ? '偏热' : '温和';
+  $('rainText').textContent = hasThunder ? '雷暴风险' : hasRain ? '可能有雨' : '较低';
+  $('tripText').textContent = data.include_attraction ? (trip >= 75 ? '适合户外' : '建议轻量出行') : '未请求景点';
+  setDial('comfortDial', comfort);
+  setDial('heatDial', heat);
+  setDial('rainDial', rain);
+  setDial('tripDial', trip);
+
+  const lines = weather.split('\n').filter(Boolean);
+  const timeline = $('timeline');
+  timeline.innerHTML = '';
+  if (lines.length > 1) {
+    lines.slice(1).forEach(line => {
+      const parts = line.split(':');
+      const item = document.createElement('div');
+      item.innerHTML = `<b>${parts[0] || '天气'}</b><span>${parts.slice(1).join(':') || line}</span>`;
+      timeline.appendChild(item);
+    });
+  } else {
+    const item = document.createElement('div');
+    item.innerHTML = `<b>当前</b><span>${weather || '暂无天气数据'}</span>`;
+    timeline.appendChild(item);
+  }
+
+  const wear = hot ? '透气短袖、遮阳帽，避免厚重衣物。' : hasRain ? '轻便外套，鞋子尽量防滑。' : '舒适日常穿搭即可。';
+  const carry = hasThunder ? '雨伞、充电宝，减少空旷地停留。' : hasRain ? '雨具、防水袋，保留室内备选。' : hot ? '水、防晒、纸巾，必要时带清凉用品。' : '水和常用证件即可。';
+  const timing = hot ? '避开正午，优先上午或傍晚。' : hasRain ? '留意临近预报，选择雨小的窗口。' : '全天安排都相对灵活。';
+  $('planner').innerHTML = [
+    `<div><b>穿着</b><span>${wear}</span></div>`,
+    `<div><b>携带</b><span>${carry}</span></div>`,
+    `<div><b>时间</b><span>${timing}</span></div>`
+  ].join('');
+}
+
+async function submit() {
+  const q = question.value.trim();
+  if (!q) return;
+  ask.disabled = true;
+  answer.classList.add('loading');
+  answer.textContent = '正在分析问题、查询实时数据...';
+  city.textContent = '-';
+  days.textContent = '-';
+  mode.textContent = inferIntent(q);
+  raw.textContent = '等待数据返回。';
+  resetSmartCards();
+  startProgress();
+  try {
+    const res = await fetchApi('/api/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ question: q })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || data.error || '请求失败');
+    stopProgress(true);
+    answer.classList.remove('loading');
+    answer.textContent = data.answer || '无回答。';
+    lastAnswer = data.answer || '';
+    lastData = { ...data, question: q };
+    city.textContent = data.city || '-';
+    days.textContent = data.days ? data.days + '天' : '-';
+    mode.textContent = data.include_attraction ? '天气 + 旅行' : '天气';
+    raw.textContent = [
+      data.weather ? '天气数据：\n' + data.weather : '',
+      data.attraction ? '\n景点依据：\n' + data.attraction : ''
+    ].filter(Boolean).join('\n');
+    analyzeWeather(data);
+    setSceneFromText((data.weather || '') + (data.answer || ''));
+    loadHistory();
+  } catch (err) {
+    stopProgress(false);
+    answer.classList.remove('loading');
+    answer.textContent = err.message;
+    lastAnswer = '';
+    lastData = null;
+    setSceneFromText('rain');
+  } finally {
+    ask.disabled = false;
+  }
+}
+
+ask.addEventListener('click', submit);
+clear.addEventListener('click', () => {
+  question.value = '';
+  refreshIntent();
+  question.focus();
+});
+copy.addEventListener('click', async () => {
+  if (!lastAnswer) return showToast('暂无可复制结果');
+  try {
+    await navigator.clipboard.writeText(lastAnswer);
+    showToast('结果已复制');
+  } catch {
+    showToast('复制失败');
+  }
+});
+favorite.addEventListener('click', async () => {
+  if (!lastData || !lastAnswer) return showToast('暂无可收藏结果');
+  try {
+    const res = await fetchApi('/api/favorites', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(lastData)
+    });
+    if (!res.ok) throw new Error('收藏失败');
+    showToast('已收藏到服务端');
+    loadFavorites();
+  } catch {
+    showToast('收藏失败');
+  }
+});
+question.addEventListener('input', refreshIntent);
+question.addEventListener('keydown', ev => {
+  if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) submit();
+});
+document.querySelectorAll('.chips button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    question.value = btn.textContent;
+    refreshIntent();
+    submit();
+  });
+});
+$('clearHistory').addEventListener('click', () => {
+  fetchApi('/api/history', { method: 'DELETE' })
+    .then(() => loadHistory())
+    .catch(() => showToast('清除失败'));
+});
+refreshIntent();
+loadHistory();
+loadFavorites();

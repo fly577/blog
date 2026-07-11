@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>天气与旅行智能体</title>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <header class="topline">
+    <span>本地智能体服务运行中</span>
+    <div class="sources">
+      <span class="source">LLM 整理回答</span>
+      <span class="source">wttr.in 天气</span>
+      <span class="source">Tavily 搜索</span>
+      <span class="source">可复用小程序 API</span>
+    </div>
+  </header>
+
+  <main class="app">
+    <section class="brand">
+      <div>
+        <div class="kicker"><span class="mark"></span><span>Weather Travel Agent</span></div>
+        <h1>天气与旅行智能体</h1>
+        <p class="lead">输入一句自然语言，系统会识别城市、日期和旅行意图，调用实时工具，再由大模型整理成清晰建议。</p>
+
+        <div class="visual-strip" aria-label="旅行视觉面板">
+          <div class="photo-card mountain"><span>山水与日光</span></div>
+          <div class="photo-card skyline"><span>城市天际线</span></div>
+          <div class="photo-card garden"><span>园林与步道</span></div>
+        </div>
+
+        <div class="toolflow">
+          <div class="flow-item"><span>1</span><b>理解问题</b><small>城市、天数、旅行偏好</small></div>
+          <div class="flow-item"><span>2</span><b>查询天气</b><small>实时天气 / 未来预报</small></div>
+          <div class="flow-item"><span>3</span><b>搜索依据</b><small>需要旅行时调用 Tavily</small></div>
+          <div class="flow-item"><span>4</span><b>生成回答</b><small>大模型压缩整理</small></div>
+        </div>
+      </div>
+
+      <div class="source-map">
+        <div><b>网页</b><span>适合本地演示和电脑端使用</span></div>
+        <div><b>FastAPI</b><span>后续可直接给微信小程序调用</span></div>
+        <div><b>工具层</b><span>天气、搜索、地图都可继续扩展</span></div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <section class="query-panel">
+        <div class="panel-head">
+          <div>
+            <h2>输入问题</h2>
+            <p>Ctrl + Enter 快速查询</p>
+          </div>
+          <span class="intent" id="intentHint">自动判断模式</span>
+        </div>
+
+        <textarea id="question" spellcheck="false">给出武汉未来3天的天气</textarea>
+        <div class="actions">
+          <button id="ask">开始查询</button>
+          <button class="secondary" id="copy">复制结果</button>
+          <button class="secondary" id="favorite">收藏结果</button>
+          <button class="ghost" id="clear">清空</button>
+        </div>
+
+        <div class="chips">
+          <button>给出广水今天的天气</button>
+          <button>给出武汉未来3天的天气</button>
+          <button>请查询上海今天的天气，并推荐一个适合的景点</button>
+          <button>杭州明天适合去哪里玩</button>
+        </div>
+      </section>
+
+      <section class="result-panel">
+        <div class="progress-line">
+          <span id="stepText">等待查询</span>
+          <span id="percent">0%</span>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+        <div class="steps">
+          <span id="s0">读取配置</span>
+          <span id="s1">识别城市</span>
+          <span id="s2">调用工具</span>
+          <span id="s3">生成回答</span>
+        </div>
+
+        <article class="answer" id="answer">结果会显示在这里。</article>
+
+        <div class="facts">
+          <div><b>城市</b><span id="city">-</span></div>
+          <div><b>天数</b><span id="days">-</span></div>
+          <div><b>模式</b><span id="mode">-</span></div>
+        </div>
+
+        <div class="insights">
+          <div><b>舒适度</b><span id="comfortText">等待数据</span><i><em id="comfortDial"></em></i></div>
+          <div><b>高温强度</b><span id="heatText">等待数据</span><i><em id="heatDial"></em></i></div>
+          <div><b>降雨风险</b><span id="rainText">等待数据</span><i><em id="rainDial"></em></i></div>
+          <div><b>旅行适配</b><span id="tripText">等待数据</span><i><em id="tripDial"></em></i></div>
+        </div>
+
+        <div class="timeline" id="timeline">
+          <div><b>时间线</b><span>查询后展示逐日天气或当前天气摘要。</span></div>
+        </div>
+
+        <div class="planner" id="planner">
+          <div><b>穿着</b><span>等待天气数据。</span></div>
+          <div><b>携带</b><span>等待天气数据。</span></div>
+          <div><b>时间</b><span>等待天气数据。</span></div>
+        </div>
+
+        <details>
+          <summary>查看原始天气与搜索依据</summary>
+          <pre id="raw">暂无</pre>
+        </details>
+      </section>
+
+      <section class="history-panel">
+        <div class="history-head">
+          <h2>查询历史</h2>
+          <button class="ghost" id="clearHistory">清除</button>
+        </div>
+        <div class="history" id="history"></div>
+        <div class="history-head favorites-head">
+          <h2>收藏结果</h2>
+        </div>
+        <div class="history" id="favorites"></div>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">已复制</div>
+  <script src="static/config.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>
