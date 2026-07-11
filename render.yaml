@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fly577-blog-api
+    name: fly-dream
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -15,4 +15,4 @@ services:
       - key: TAVILY_API_KEY
         sync: false
       - key: CORS_ALLOW_ORIGINS
-        value: https://fly577.github.io,https://fly577.github.io/blog
+        value: http://127.0.0.1:8000,http://localhost:8000,https://fly-dream.onrender.com
