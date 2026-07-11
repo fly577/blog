@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: hesiea-blog-api
+    name: fly577-blog-api
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -15,4 +15,4 @@ services:
       - key: TAVILY_API_KEY
         sync: false
       - key: CORS_ALLOW_ORIGINS
-        value: https://hesiea.github.io,https://hesiea.github.io/blog
+        value: https://fly577.github.io,https://fly577.github.io/blog

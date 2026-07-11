@@ -1,104 +1,156 @@
-# 发布到 `https://hesiea.github.io/blog/`
+# 发布为公开网站
 
-这个项目要完整可用，需要同时发布两部分：
+当前按本地 Git 远程仓库配置，目标站点是：
 
-- 前端页面：GitHub Pages，最终给别人打开的地址是 `https://hesiea.github.io/blog/`
-- 问答后端：FastAPI，需要部署到能运行 Python 的公网平台，例如 Render
+```text
+https://fly577.github.io/blog/
+```
 
-浏览器访问流程是：
+完整问答功能需要两部分同时上线：
+
+- 前端：GitHub Pages，负责展示网页。
+- 后端：FastAPI 公网服务，负责天气、搜索和大模型问答。
+
+访问链路：
 
 ```text
 用户浏览器
-  -> https://hesiea.github.io/blog/
-  -> https://hesiea-blog-api.onrender.com/api/query
+  -> https://fly577.github.io/blog/
+  -> https://fly577-blog-api.onrender.com/api/query
 ```
 
-GitHub Pages 不能运行 Python，也不能保存后端 API key，所以问答功能必须走独立公网后端。
+GitHub Pages 只能托管静态 HTML/CSS/JS，不能运行 Python，也不能保存 API Key。因此问答后端必须部署到 Render、Railway、Fly.io、VPS 等能运行 Python 的平台。
 
-## 1. 创建 GitHub 仓库
+## 1. 前端发布到 GitHub Pages
 
-在 GitHub 账号 `hesiea` 下创建仓库：
+本地远程仓库当前应为：
 
 ```text
-blog
+https://github.com/fly577/blog.git
 ```
 
-把本地项目推到这个仓库的 `main` 分支。
+推送代码：
 
-## 2. 开启 GitHub Pages
+```powershell
+git push -u origin main
+```
 
 进入 GitHub 仓库：
 
 ```text
-https://github.com/hesiea/blog
+https://github.com/fly577/blog
 ```
 
-然后设置：
+打开：
 
 ```text
-Settings -> Pages -> Build and deployment -> Source -> GitHub Actions
+Settings -> Pages
 ```
 
-本项目已经包含工作流：
+设置：
+
+```text
+Build and deployment -> Source -> GitHub Actions
+```
+
+项目已经包含 GitHub Actions 工作流：
 
 ```text
 .github/workflows/pages.yml
 ```
 
-推送到 `main` 后，GitHub Actions 会自动发布前端。发布成功后，别人可以打开：
+工作流成功后，访问：
 
 ```text
-https://hesiea.github.io/blog/
+https://fly577.github.io/blog/
 ```
 
-## 3. 发布问答后端
+正确页面应显示天气旅行智能体，而不是 GitHub Pages 的 404 页面。
 
-项目已包含 Render 配置：
+## 2. 后端部署到 Render
+
+项目已经包含 Render 配置：
 
 ```text
 render.yaml
 ```
 
-在 Render 创建 Blueprint 或 Web Service，连接 `hesiea/blog` 仓库。服务名使用：
+在 Render 新建 Blueprint 或 Web Service，连接仓库：
 
 ```text
-hesiea-blog-api
+fly577/blog
+```
+
+服务名使用：
+
+```text
+fly577-blog-api
 ```
 
 后端公网地址预计为：
 
 ```text
-https://hesiea-blog-api.onrender.com
+https://fly577-blog-api.onrender.com
 ```
 
-Render 环境变量必须配置：
+必须在 Render 配置环境变量：
 
 ```text
 LLM_API_KEY=你的模型 API Key
 LLM_BASE_URL=https://token.sensenova.cn/v1
 LLM_MODEL=sensenova-6.7-flash-lite
 TAVILY_API_KEY=你的 Tavily API Key
-CORS_ALLOW_ORIGINS=https://hesiea.github.io,https://hesiea.github.io/blog
+CORS_ALLOW_ORIGINS=https://fly577.github.io,https://fly577.github.io/blog
 ```
 
-后端启动命令已写入 `render.yaml`：
+后端启动命令已经写在 `render.yaml`：
 
 ```bash
 uvicorn webapp.main:app --host 0.0.0.0 --port $PORT
 ```
 
-## 4. 前端 API 地址
+## 3. 前端 API 地址
 
-前端配置文件是：
+前端配置文件：
 
 ```text
 webapp/static/config.js
 ```
 
-当前已经设置为：
+当前配置：
 
 ```js
-window.WEATHER_AGENT_API_BASE_URL = "https://hesiea-blog-api.onrender.com";
+window.WEATHER_AGENT_API_BASE_URL = "https://fly577-blog-api.onrender.com";
 ```
 
-如果 Render 实际生成了不同域名，需要把这里改成实际后端域名后重新推送。
+如果 Render 实际生成了不同域名，修改这里后重新提交并推送。
+
+## 4. 上线检查
+
+检查前端：
+
+```text
+https://fly577.github.io/blog/
+https://fly577.github.io/blog/static/app.js
+https://fly577.github.io/blog/static/config.js
+```
+
+检查后端：
+
+```text
+https://fly577-blog-api.onrender.com/api/health
+```
+
+正确后端返回：
+
+```json
+{"ok":true}
+```
+
+最后在网页中输入：
+
+```text
+给出武汉未来3天的天气
+```
+
+如果能返回答案，说明前端、后端、CORS、API Key 全部连通。
