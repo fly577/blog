@@ -1,0 +1,1 @@
+/home/fly577/.virtualenvs/llm-web/bin/uvicorn --app-dir /home/fly577/LLM --uds ${DOMAIN_SOCKET} webapp.main:app
