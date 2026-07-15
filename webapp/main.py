@@ -46,6 +46,10 @@ if cors_origins:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=cors_origins,
+        allow_origin_regex=os.getenv(
+            "CORS_ALLOW_ORIGIN_REGEX",
+            r"https://.*\.github\.io|https://.*\.pythonanywhere\.com",
+        ),
         allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"],

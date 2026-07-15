@@ -3,6 +3,22 @@ import requests
 
 CITY_QUERY_ALIASES = {
     "广水": "Guangshui,Hubei",
+    "武汉": "Wuhan",
+    "北京": "Beijing",
+    "上海": "Shanghai",
+    "广州": "Guangzhou",
+    "深圳": "Shenzhen",
+    "杭州": "Hangzhou",
+    "南京": "Nanjing",
+    "苏州": "Suzhou",
+    "成都": "Chengdu",
+    "重庆": "Chongqing",
+    "西安": "Xian",
+    "天津": "Tianjin",
+    "青岛": "Qingdao",
+    "厦门": "Xiamen",
+    "长沙": "Changsha",
+    "郑州": "Zhengzhou",
 }
 
 
@@ -29,7 +45,12 @@ def get_weather(city: str, days: int = 1) -> str:
     }
 
     try:
-        response = requests.get(url, params=params, timeout=10)
+        response = requests.get(
+            url,
+            params=params,
+            timeout=10,
+            headers={"User-Agent": "weather-travel-agent/1.0"},
+        )
         response.raise_for_status()
         data = response.json()
 
