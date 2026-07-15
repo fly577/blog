@@ -178,6 +178,17 @@ def run_travel_assistant(user_prompt: str) -> None:
     print(result["answer"])
 
 
+def build_fallback_answer(city: str, days: int, weather: str, attraction: str, include_attraction: bool) -> str:
+    lines = [f"{city}{'未来' + str(days) + '天' if days > 1 else '当前'}天气：{weather}"]
+    if include_attraction:
+        if attraction:
+            lines.append(f"景点建议：{attraction}")
+        else:
+            lines.append("景点建议暂未获取到，可优先选择室内或交通方便的地点。")
+    lines.append("备注：模型润色服务暂不可用，以上为工具查询结果。")
+    return "\n".join(lines)
+
+
 def answer_query(user_prompt: str, progress_cb=None) -> dict[str, str | bool | int]:
     include_attraction = wants_attraction(user_prompt)
     total_steps = 4 if include_attraction else 3
@@ -212,11 +223,7 @@ def answer_query(user_prompt: str, progress_cb=None) -> dict[str, str | bool | i
     answer = llm.generate(final_prompt, system_prompt=FINAL_SYSTEM_PROMPT, verbose=False)
 
     if answer.startswith("错误:调用语言模型服务时出错"):
-        fallback = f"{city}天气信息：{weather}"
-        if attraction:
-            fallback += f"\n景点建议：{attraction}"
-        fallback += f"\n备注：模型整理答案失败，原始错误为：{answer}"
-        answer = fallback
+        answer = build_fallback_answer(city, days, weather, attraction, include_attraction)
 
     return {
         "answer": answer.strip(),
