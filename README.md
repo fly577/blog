@@ -1,6 +1,6 @@
-# 天气与旅行智能体
+# 通用 AI 与天气旅行智能体
 
-这是一个网页天气旅行助手原型：用户输入自然语言，系统识别城市、天数和旅行意图，调用天气/搜索/大模型工具，再在网页中展示结果。
+这是一个网页智能体原型：用户输入自然语言，系统会先判断是普通 AI 问答，还是天气/旅行任务。普通问题直接交给大模型回答；天气和旅行问题会识别城市、天数和旅行意图，调用天气/搜索工具，再在网页中展示结果。
 
 ## 当前架构
 
@@ -11,6 +11,7 @@ FastAPI 后端 webapp/main.py
         ↓
 智能体调度 main.py
         ↓
+通用问答 OpenAICompatibleClient.py
 天气工具 get_weather.py
 景点搜索 get_attraction.py
 大模型 OpenAICompatibleClient.py
@@ -99,6 +100,14 @@ Content-Type: application/json
 }
 ```
 
+也可以直接问普通问题：
+
+```json
+{
+  "question": "解释一下什么是大语言模型"
+}
+```
+
 返回结构：
 
 ```json
@@ -108,9 +117,12 @@ Content-Type: application/json
   "days": 3,
   "weather": "天气原始摘要",
   "attraction": "",
-  "include_attraction": false
+  "include_attraction": false,
+  "task_type": "天气"
 }
 ```
+
+普通 AI 问答会返回 `task_type: "普通AI"`，并且 `city`、`weather` 等工具字段为空。
 
 查询历史：
 
@@ -151,6 +163,8 @@ data/app.db
 
 ## 下一步方向
 
+- 换成 PythonAnywhere 可以访问的大模型 API，恢复公网普通 AI 的完整回答能力。
+- 如果要接入 MiniMind，可先把 MiniMind 作为 OpenAI-compatible API 服务部署出来，再把 `LLM_BASE_URL` 指向该服务。
 - 替换更稳定的天气 API，例如和风天气或高德天气。
 - 增加地图 API，支持景点距离、路线规划、附近餐饮。
 - 增加用户偏好：预算、人数、老人儿童、室内外偏好。

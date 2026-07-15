@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>天气与旅行智能体</title>
+  <title>通用 AI 与天气旅行智能体</title>
   <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
   <canvas id="sky" aria-hidden="true"></canvas>
   <header class="topline">
-    <span>本地智能体服务运行中</span>
+    <span>智能体 API 服务运行中</span>
     <div class="sources">
+      <span class="source">通用 AI 问答</span>
       <span class="source">LLM 整理回答</span>
       <span class="source">wttr.in 天气</span>
       <span class="source">Tavily 搜索</span>
@@ -22,8 +23,8 @@
     <section class="brand">
       <div>
         <div class="kicker"><span class="mark"></span><span>Weather Travel Agent</span></div>
-        <h1>天气与旅行智能体</h1>
-        <p class="lead">输入一句自然语言，系统会识别城市、日期和旅行意图，调用实时工具，再由大模型整理成清晰建议。</p>
+        <h1>通用 AI 与天气旅行智能体</h1>
+        <p class="lead">输入一句自然语言，系统会自动判断是普通问答，还是天气、旅行任务；需要实时信息时调用工具，再整理成清晰回答。</p>
 
         <div class="visual-strip" aria-label="旅行视觉面板">
           <div class="photo-card mountain"><span>山水与日光</span></div>
@@ -32,17 +33,17 @@
         </div>
 
         <div class="toolflow">
-          <div class="flow-item"><span>1</span><b>理解问题</b><small>城市、天数、旅行偏好</small></div>
-          <div class="flow-item"><span>2</span><b>查询天气</b><small>实时天气 / 未来预报</small></div>
-          <div class="flow-item"><span>3</span><b>搜索依据</b><small>需要旅行时调用 Tavily</small></div>
-          <div class="flow-item"><span>4</span><b>生成回答</b><small>大模型压缩整理</small></div>
+          <div class="flow-item"><span>1</span><b>理解问题</b><small>普通问答 / 天气 / 旅行</small></div>
+          <div class="flow-item"><span>2</span><b>选择能力</b><small>直接问答或调用实时工具</small></div>
+          <div class="flow-item"><span>3</span><b>搜索依据</b><small>天气、景点等可继续扩展</small></div>
+          <div class="flow-item"><span>4</span><b>生成回答</b><small>模型整理或工具降级回答</small></div>
         </div>
       </div>
 
       <div class="source-map">
         <div><b>网页</b><span>适合本地演示和电脑端使用</span></div>
         <div><b>FastAPI</b><span>后续可直接给微信小程序调用</span></div>
-        <div><b>工具层</b><span>天气、搜索、地图都可继续扩展</span></div>
+        <div><b>工具层</b><span>普通问答、天气、搜索、地图都可继续扩展</span></div>
       </div>
     </section>
 
@@ -56,7 +57,7 @@
           <span class="intent" id="intentHint">自动判断模式</span>
         </div>
 
-        <textarea id="question" spellcheck="false">给出武汉未来3天的天气</textarea>
+        <textarea id="question" spellcheck="false">解释一下什么是大语言模型</textarea>
         <div class="actions">
           <button id="ask">开始查询</button>
           <button class="secondary" id="copy">复制结果</button>
@@ -69,6 +70,8 @@
           <button>给出武汉未来3天的天气</button>
           <button>请查询上海今天的天气，并推荐一个适合的景点</button>
           <button>杭州明天适合去哪里玩</button>
+          <button>解释一下什么是大语言模型</button>
+          <button>帮我写一个 Python 快速排序示例</button>
         </div>
       </section>
 

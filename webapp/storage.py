@@ -26,6 +26,7 @@ def init_db() -> None:
                 weather TEXT NOT NULL,
                 attraction TEXT NOT NULL DEFAULT '',
                 include_attraction INTEGER NOT NULL DEFAULT 0,
+                task_type TEXT NOT NULL DEFAULT '天气',
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
             """
@@ -42,11 +43,21 @@ def init_db() -> None:
                 weather TEXT NOT NULL,
                 attraction TEXT NOT NULL DEFAULT '',
                 include_attraction INTEGER NOT NULL DEFAULT 0,
+                task_type TEXT NOT NULL DEFAULT '天气',
                 note TEXT NOT NULL DEFAULT '',
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
             """
         )
+        ensure_column(conn, "query_history", "task_type", "TEXT NOT NULL DEFAULT '天气'")
+        ensure_column(conn, "favorites", "task_type", "TEXT NOT NULL DEFAULT '天气'")
+
+
+def ensure_column(conn: sqlite3.Connection, table: str, column: str, definition: str) -> None:
+    rows = conn.execute(f"PRAGMA table_info({table})").fetchall()
+    if any(row["name"] == column for row in rows):
+        return
+    conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
 
 
 def row_to_dict(row: sqlite3.Row) -> dict[str, Any]:
@@ -61,8 +72,8 @@ def add_history(question: str, result: dict[str, Any]) -> int:
         cursor = conn.execute(
             """
             INSERT INTO query_history (
-                question, answer, city, days, weather, attraction, include_attraction
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                question, answer, city, days, weather, attraction, include_attraction, task_type
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 question,
@@ -72,6 +83,7 @@ def add_history(question: str, result: dict[str, Any]) -> int:
                 result.get("weather", ""),
                 result.get("attraction", ""),
                 1 if result.get("include_attraction") else 0,
+                result.get("task_type", "天气"),
             ),
         )
         return int(cursor.lastrowid)
@@ -100,8 +112,8 @@ def add_favorite(payload: dict[str, Any]) -> int:
         cursor = conn.execute(
             """
             INSERT INTO favorites (
-                history_id, question, answer, city, days, weather, attraction, include_attraction, note
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                history_id, question, answer, city, days, weather, attraction, include_attraction, task_type, note
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 payload.get("history_id"),
@@ -112,6 +124,7 @@ def add_favorite(payload: dict[str, Any]) -> int:
                 payload.get("weather", ""),
                 payload.get("attraction", ""),
                 1 if payload.get("include_attraction") else 0,
+                payload.get("task_type", "天气"),
                 payload.get("note", ""),
             ),
         )

@@ -134,7 +134,7 @@ const intentHint = $('intentHint');
 const historyBox = $('history');
 const favoritesBox = $('favorites');
 const toast = $('toast');
-const steps = ['读取配置', '识别城市与天数', '查询天气或景点', '生成简洁回答'];
+const steps = ['理解问题', '选择能力', '调用工具或模型', '生成回答'];
 let progressTimer = null;
 let lastAnswer = '';
 let lastData = null;
@@ -155,7 +155,8 @@ function fetchApi(path, options) {
 }
 
 function inferIntent(text) {
-  if (/景点|旅游|旅行|游玩|去哪|哪里玩|推荐|路线|攻略/.test(text)) return '天气 + 旅行推荐';
+  if (!/天气|气温|温度|下雨|降雨|雨|晴|多云|阴天|预报|冷不冷|热不热|穿什么|适合出门|适合去|景点|旅游|旅行|游玩|去哪|哪里玩|路线|攻略/.test(text)) return '通用 AI';
+  if (/景点|旅游|旅行|游玩|去哪|哪里玩|路线|攻略/.test(text)) return '天气 + 旅行推荐';
   if (/未来|[1-3]\s*天|明天|预报/.test(text)) return '多天天气';
   return '实时天气';
 }
@@ -267,11 +268,11 @@ function showStoredResult(item) {
   lastData = item;
   city.textContent = item.city || '-';
   days.textContent = item.days ? item.days + '天' : '-';
-  mode.textContent = item.include_attraction ? '天气 + 旅行' : '天气';
+  mode.textContent = taskTypeLabel(item);
   raw.textContent = [
     item.weather ? '天气数据：\n' + item.weather : '',
     item.attraction ? '\n景点依据：\n' + item.attraction : ''
-  ].filter(Boolean).join('\n');
+  ].filter(Boolean).join('\n') || '本次没有工具原始数据。';
   analyzeWeather(item);
   setSceneFromText((item.weather || '') + (item.answer || ''));
 }
@@ -305,8 +306,34 @@ function resetSmartCards() {
   ].join('');
 }
 
+function taskTypeLabel(data) {
+  if (data.task_type) return data.task_type;
+  return data.include_attraction ? '天气 + 旅行' : '天气';
+}
+
+function showGeneralCards() {
+  $('comfortText').textContent = '不适用';
+  $('heatText').textContent = '不适用';
+  $('rainText').textContent = '不适用';
+  $('tripText').textContent = '通用问答';
+  setDial('comfortDial', 8);
+  setDial('heatDial', 8);
+  setDial('rainDial', 8);
+  setDial('tripDial', 72);
+  $('timeline').innerHTML = '<div><b>类型</b><span>本次为普通 AI 问答，不调用天气工具。</span></div>';
+  $('planner').innerHTML = [
+    '<div><b>能力</b><span>写作、解释、代码、学习计划等。</span></div>',
+    '<div><b>数据</b><span>不包含实时天气或搜索数据。</span></div>',
+    '<div><b>提示</b><span>需要实时信息时请明确说明城市、天气或旅行需求。</span></div>'
+  ].join('');
+}
+
 function analyzeWeather(data) {
   const weather = data.weather || '';
+  if (!weather) {
+    showGeneralCards();
+    return;
+  }
   const all = weather + '\n' + (data.answer || '');
   const temp = firstNumber(all, [/体感温度(\d+)/, /气温(\d+)/, /平均(\d+)/, /(\d+)-\d+摄氏度/]);
   const hasRain = /雨|rain/i.test(all);
@@ -359,7 +386,7 @@ async function submit() {
   if (!q) return;
   ask.disabled = true;
   answer.classList.add('loading');
-  answer.textContent = '正在分析问题、查询实时数据...';
+  answer.textContent = '正在分析问题并生成回答...';
   city.textContent = '-';
   days.textContent = '-';
   mode.textContent = inferIntent(q);
@@ -381,11 +408,11 @@ async function submit() {
     lastData = { ...data, question: q };
     city.textContent = data.city || '-';
     days.textContent = data.days ? data.days + '天' : '-';
-    mode.textContent = data.include_attraction ? '天气 + 旅行' : '天气';
+    mode.textContent = taskTypeLabel(data);
     raw.textContent = [
       data.weather ? '天气数据：\n' + data.weather : '',
       data.attraction ? '\n景点依据：\n' + data.attraction : ''
-    ].filter(Boolean).join('\n');
+    ].filter(Boolean).join('\n') || '本次没有工具原始数据。';
     analyzeWeather(data);
     setSceneFromText((data.weather || '') + (data.answer || ''));
     loadHistory();

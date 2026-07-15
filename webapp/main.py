@@ -75,6 +75,7 @@ class QueryResponse(BaseModel):
     weather: str
     attraction: str
     include_attraction: bool
+    task_type: str = "天气"
 
 
 class FavoriteRequest(BaseModel):
@@ -86,6 +87,7 @@ class FavoriteRequest(BaseModel):
     weather: str = ""
     attraction: str = ""
     include_attraction: bool = False
+    task_type: str = "天气"
     note: str = ""
 
 
