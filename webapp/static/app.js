@@ -1,18 +1,13 @@
 const canvas = document.getElementById('sky');
 const ctx = canvas.getContext('2d');
 const API_BASE_URL = String(window.WEATHER_AGENT_API_BASE_URL || '').replace(/\/+$/, '');
-let w = 0, h = 0, tick = 0, scene = 'sunny';
-const drops = Array.from({ length: 90 }, () => ({
-  x: Math.random(), y: Math.random(), speed: 0.012 + Math.random() * 0.018, len: 12 + Math.random() * 18
-}));
-const sparks = Array.from({ length: 48 }, () => ({
-  x: Math.random(), y: Math.random(), r: 1 + Math.random() * 2.5, drift: 0.2 + Math.random() * 0.8
-}));
+let w = 0, h = 0, scene = 'sunny';
 
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
   w = canvas.width = Math.floor(window.innerWidth * ratio);
   h = canvas.height = Math.floor(window.innerHeight * ratio);
+  drawInkBackdrop();
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
@@ -23,98 +18,34 @@ function setSceneFromText(text) {
   else if (/热|高温|炎|晴|sunny/i.test(text)) scene = 'hot';
   else if (/云|cloud/i.test(text)) scene = 'cloud';
   else scene = 'sunny';
+  drawInkBackdrop();
 }
 
-function gradient() {
-  const g = ctx.createLinearGradient(0, 0, w, h);
-  if (scene === 'storm') {
-    g.addColorStop(0, '#52616e'); g.addColorStop(0.55, '#a7b8bd'); g.addColorStop(1, '#e6d0a0');
-  } else if (scene === 'rain') {
-    g.addColorStop(0, '#9ec6d0'); g.addColorStop(0.55, '#d4e6e5'); g.addColorStop(1, '#e9d8ae');
-  } else if (scene === 'hot') {
-    g.addColorStop(0, '#cfe9ef'); g.addColorStop(0.48, '#f3efe0'); g.addColorStop(1, '#f3c27a');
-  } else {
-    g.addColorStop(0, '#cce7ee'); g.addColorStop(0.55, '#eff5ed'); g.addColorStop(1, '#e7d29d');
-  }
-  return g;
-}
-
-function drawCloud(x, y, r, alpha) {
-  ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-  ctx.beginPath();
-  ctx.arc(x, y, r * 0.55, 0, Math.PI * 2);
-  ctx.arc(x + r * 0.42, y - r * 0.23, r * 0.72, 0, Math.PI * 2);
-  ctx.arc(x + r * 0.98, y, r * 0.5, 0, Math.PI * 2);
-  ctx.rect(x - r * 0.45, y, r * 1.82, r * 0.46);
-  ctx.fill();
-}
-
-function drawWave(y, amp, color, speed) {
+function drawInkMountain(points, color) {
   ctx.fillStyle = color;
   ctx.beginPath();
-  ctx.moveTo(0, h);
-  for (let x = 0; x <= w; x += 20) {
-    ctx.lineTo(x, y + Math.sin(x / 165 + tick * speed) * amp);
-  }
-  ctx.lineTo(w, h);
+  ctx.moveTo(points[0][0] * w, h);
+  points.forEach(([x, y]) => ctx.lineTo(x * w, y * h));
+  ctx.lineTo(points[points.length - 1][0] * w, h);
   ctx.closePath();
   ctx.fill();
 }
 
-function drawRain() {
-  ctx.strokeStyle = scene === 'storm' ? 'rgba(235,248,255,0.58)' : 'rgba(63,104,124,0.34)';
-  ctx.lineWidth = Math.max(1, w / 1200);
-  drops.forEach(d => {
-    d.y += d.speed;
-    d.x += 0.0018;
-    if (d.y > 1.08) { d.y = -0.08; d.x = Math.random(); }
-    const x = d.x * w;
-    const y = d.y * h;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x - d.len, y + d.len * 1.8);
-    ctx.stroke();
-  });
-}
-
-function drawSparks() {
-  sparks.forEach(s => {
-    const x = ((s.x * w) + Math.sin(tick * s.drift) * 28) % w;
-    const y = s.y * h;
-    ctx.fillStyle = 'rgba(255,233,170,0.42)';
-    ctx.beginPath();
-    ctx.arc(x, y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-function animate() {
-  tick += 0.012;
-  ctx.fillStyle = gradient();
+function drawInkBackdrop() {
+  if (!ctx) return;
+  ctx.clearRect(0, 0, w, h);
+  const wash = ctx.createLinearGradient(0, 0, w, h);
+  wash.addColorStop(0, 'rgba(247,243,233,0.28)');
+  wash.addColorStop(1, scene === 'rain' || scene === 'storm' ? 'rgba(58,90,88,0.16)' : 'rgba(200,60,60,0.07)');
+  ctx.fillStyle = wash;
   ctx.fillRect(0, 0, w, h);
-  drawSparks();
-  const sunX = w * (0.74 + Math.sin(tick * 0.35) * 0.02);
-  const sunY = h * (0.19 + Math.cos(tick * 0.25) * 0.015);
-  const radius = Math.min(w, h) * 0.072;
-  ctx.fillStyle = scene === 'storm' ? 'rgba(255,220,145,0.38)' : 'rgba(228, 158, 52, 0.84)';
+  drawInkMountain([[0, 0.78], [0.16, 0.56], [0.31, 0.72], [0.48, 0.48], [0.65, 0.7], [0.82, 0.52], [1, 0.76]], 'rgba(44,44,44,0.13)');
+  drawInkMountain([[0, 0.88], [0.12, 0.72], [0.3, 0.84], [0.44, 0.66], [0.63, 0.82], [0.76, 0.64], [1, 0.86]], 'rgba(58,90,88,0.13)');
+  ctx.fillStyle = scene === 'hot' ? 'rgba(200,60,60,0.08)' : 'rgba(44,44,44,0.08)';
   ctx.beginPath();
-  ctx.arc(sunX, sunY, radius, 0, Math.PI * 2);
+  ctx.arc(w * 0.78, h * 0.18, Math.min(w, h) * 0.06, 0, Math.PI * 2);
   ctx.fill();
-  for (let i = 0; i < 8; i++) {
-    const x = ((i * 270 + tick * 7800) % (w + 420)) - 210;
-    const y = h * (0.13 + (i % 5) * 0.115);
-    drawCloud(x, y, 54 + (i % 4) * 16, scene === 'storm' ? 0.44 : 0.34 + (i % 3) * 0.12);
-  }
-  if (scene === 'rain' || scene === 'storm') drawRain();
-  if (scene === 'storm' && Math.floor(tick * 12) % 80 === 0) {
-    ctx.fillStyle = 'rgba(255,255,255,0.22)';
-    ctx.fillRect(0, 0, w, h);
-  }
-  drawWave(h * 0.78, 20, 'rgba(31,118,111,0.12)', 3.2);
-  drawWave(h * 0.86, 16, 'rgba(217,154,53,0.16)', 4.5);
-  requestAnimationFrame(animate);
 }
-animate();
 
 const $ = id => document.getElementById(id);
 const question = $('question');
@@ -460,7 +391,10 @@ favorite.addEventListener('click', async () => {
 });
 question.addEventListener('input', refreshIntent);
 question.addEventListener('keydown', ev => {
-  if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) submit();
+  if (ev.key === 'Enter' && !ev.shiftKey) {
+    ev.preventDefault();
+    submit();
+  }
 });
 document.querySelectorAll('.chips button').forEach(btn => {
   btn.addEventListener('click', () => {

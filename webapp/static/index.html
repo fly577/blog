@@ -3,92 +3,94 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>通用 AI 与天气旅行智能体</title>
+  <title>水墨 AI 问答</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
   <canvas id="sky" aria-hidden="true"></canvas>
-  <header class="topline">
-    <span>智能体 API 服务运行中</span>
-    <div class="sources">
-      <span class="source">通用 AI 问答</span>
-      <span class="source">LLM 整理回答</span>
-      <span class="source">wttr.in 天气</span>
-      <span class="source">Tavily 搜索</span>
-      <span class="source">可复用小程序 API</span>
+  <div class="ink-mountains" aria-hidden="true"></div>
+
+  <header class="topline scroll-nav">
+    <div class="nav-brand">
+      <span class="seal-mark">问</span>
+      <div>
+        <b>水墨智能问答</b>
+        <small>Weather Travel Agent</small>
+      </div>
     </div>
+    <div class="sources">
+      <span class="source"><i class="fa-solid fa-comments"></i> 通用 AI</span>
+      <span class="source"><i class="fa-solid fa-cloud-sun"></i> 天气工具</span>
+      <span class="source"><i class="fa-solid fa-magnifying-glass"></i> Tavily</span>
+      <span class="source"><i class="fa-solid fa-plug"></i> 小程序 API</span>
+    </div>
+    <nav class="nav-actions" aria-label="页面操作">
+      <button class="seal-button muted" id="clearHistory" type="button">清空对话</button>
+      <button class="seal-button muted" type="button" onclick="window.print()">导出记录</button>
+      <a class="seal-button" href="#config-panel">API 配置</a>
+    </nav>
   </header>
 
-  <main class="app">
-    <section class="brand">
-      <div>
-        <div class="kicker"><span class="mark"></span><span>Weather Travel Agent</span></div>
-        <h1>通用 AI 与天气旅行智能体</h1>
-        <p class="lead">输入一句自然语言，系统会自动判断是普通问答，还是天气、旅行任务；需要实时信息时调用工具，再整理成清晰回答。</p>
-
-        <div class="visual-strip" aria-label="旅行视觉面板">
-          <div class="photo-card mountain"><span>山水与日光</span></div>
-          <div class="photo-card skyline"><span>城市天际线</span></div>
-          <div class="photo-card garden"><span>园林与步道</span></div>
-        </div>
-
-        <div class="toolflow">
-          <div class="flow-item"><span>1</span><b>理解问题</b><small>普通问答 / 天气 / 旅行</small></div>
-          <div class="flow-item"><span>2</span><b>选择能力</b><small>直接问答或调用实时工具</small></div>
-          <div class="flow-item"><span>3</span><b>搜索依据</b><small>天气、景点等可继续扩展</small></div>
-          <div class="flow-item"><span>4</span><b>生成回答</b><small>模型整理或工具降级回答</small></div>
+  <main class="app ink-layout">
+    <aside class="brand history-panel scroll-side">
+      <div class="side-title">
+        <span>卷</span>
+        <div>
+          <h2>对话卷轴</h2>
+          <p class="lead">历史与收藏保存在服务端。</p>
         </div>
       </div>
+
+      <section class="history-section">
+        <div class="history-head">
+          <h3>查询历史</h3>
+        </div>
+        <div class="history" id="history"></div>
+      </section>
+
+      <section class="history-section favorites-head">
+        <div class="history-head">
+          <h3>收藏结果</h3>
+        </div>
+        <div class="history" id="favorites"></div>
+      </section>
 
       <div class="source-map">
-        <div><b>网页</b><span>适合本地演示和电脑端使用</span></div>
-        <div><b>FastAPI</b><span>后续可直接给微信小程序调用</span></div>
-        <div><b>工具层</b><span>普通问答、天气、搜索、地图都可继续扩展</span></div>
+        <div><b>公网前端</b><span>GitHub Pages 静态页面</span></div>
+        <div><b>后端接口</b><span>读取 WEATHER_AGENT_API_BASE_URL</span></div>
+        <div><b>工具能力</b><span>普通问答、天气、旅行搜索</span></div>
       </div>
-    </section>
+    </aside>
 
-    <section class="workspace">
-      <section class="query-panel">
+    <section class="workspace conversation-shell">
+      <section class="result-panel conversation-panel">
         <div class="panel-head">
           <div>
-            <h2>输入问题</h2>
-            <p>Ctrl + Enter 快速查询</p>
+            <h1>山水问答</h1>
+            <p>输入问题后，系统自动判断普通问答、天气或旅行任务。</p>
           </div>
           <span class="intent" id="intentHint">自动判断模式</span>
         </div>
 
-        <textarea id="question" spellcheck="false">解释一下什么是大语言模型</textarea>
-        <div class="actions">
-          <button id="ask">开始查询</button>
-          <button class="secondary" id="copy">复制结果</button>
-          <button class="secondary" id="favorite">收藏结果</button>
-          <button class="ghost" id="clear">清空</button>
-        </div>
-
-        <div class="chips">
-          <button>给出广水今天的天气</button>
-          <button>给出武汉未来3天的天气</button>
-          <button>请查询上海今天的天气，并推荐一个适合的景点</button>
-          <button>杭州明天适合去哪里玩</button>
-          <button>解释一下什么是大语言模型</button>
-          <button>帮我写一个 Python 快速排序示例</button>
-        </div>
-      </section>
-
-      <section class="result-panel">
         <div class="progress-line">
           <span id="stepText">等待查询</span>
           <span id="percent">0%</span>
         </div>
         <div class="progress"><span id="progressBar"></span></div>
         <div class="steps">
-          <span id="s0">读取配置</span>
-          <span id="s1">识别城市</span>
+          <span id="s0">理解问题</span>
+          <span id="s1">选择能力</span>
           <span id="s2">调用工具</span>
           <span id="s3">生成回答</span>
         </div>
 
-        <article class="answer" id="answer">结果会显示在这里。</article>
+        <div class="message-row user-message">
+          <div class="message-bubble user-bubble">当前问题会在下方砚台输入区编辑。</div>
+        </div>
+        <div class="message-row ai-message">
+          <article class="answer message-bubble ai-bubble" id="answer">结果会显示在这里。</article>
+        </div>
 
         <div class="facts">
           <div><b>城市</b><span id="city">-</span></div>
@@ -119,18 +121,57 @@
         </details>
       </section>
 
-      <section class="history-panel">
-        <div class="history-head">
-          <h2>查询历史</h2>
-          <button class="ghost" id="clearHistory">清除</button>
+      <section class="query-panel ink-console">
+        <div class="console-head">
+          <div>
+            <h2>砚台输入</h2>
+            <p>Ctrl + Enter 发送，Shift + Enter 换行</p>
+          </div>
+          <div class="console-tools">
+            <label class="ink-toggle"><input type="checkbox" checked> 联网</label>
+            <select aria-label="模型选择">
+              <option>默认模型</option>
+              <option>MiniMind 接入</option>
+              <option>工具优先</option>
+            </select>
+          </div>
         </div>
-        <div class="history" id="history"></div>
-        <div class="history-head favorites-head">
-          <h2>收藏结果</h2>
+
+        <textarea id="question" spellcheck="false">解释一下什么是大语言模型</textarea>
+        <div class="actions">
+          <button id="ask" class="seal-send" type="button"><i class="fa-solid fa-paper-plane"></i> 发送</button>
+          <button class="secondary" id="copy" type="button">复制结果</button>
+          <button class="secondary" id="favorite" type="button">收藏结果</button>
+          <button class="ghost" id="clear" type="button">清空输入</button>
         </div>
-        <div class="history" id="favorites"></div>
+
+        <div class="chips">
+          <button type="button">给出广水今天的天气</button>
+          <button type="button">给出武汉未来3天的天气</button>
+          <button type="button">请查询上海今天的天气，并推荐一个适合的景点</button>
+          <button type="button">杭州明天适合去哪里玩</button>
+          <button type="button">解释一下什么是大语言模型</button>
+          <button type="button">帮我写一个 Python 快速排序示例</button>
+        </div>
       </section>
     </section>
+
+    <aside class="config-panel" id="config-panel">
+      <div class="config-card">
+        <a class="config-close" href="#" aria-label="关闭配置">×</a>
+        <h2>API 配置</h2>
+        <p>此处仅展示配置项。公开前端不要保存密钥，真实密钥应放在后端环境变量。</p>
+        <label>WEATHER_AGENT_API_BASE_URL
+          <input type="text" value="https://hzx.pythonanywhere.com" readonly>
+        </label>
+        <label>LLM 密钥
+          <input type="password" value="由后端 .env 管理" readonly>
+        </label>
+        <label>Tavily 密钥
+          <input type="password" value="由后端 .env 管理" readonly>
+        </label>
+      </div>
+    </aside>
   </main>
 
   <div class="toast" id="toast">已复制</div>
